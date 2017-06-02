@@ -1,5 +1,5 @@
-import soundfile
-import sounddevice
+import soundfile as sf
+import sounddevice as sd
 
 class Recorder:
 
@@ -8,6 +8,7 @@ class Recorder:
 
     def start(self):
         print("*** Recording started!")
+        print(sd.query_devices())
 
     def stop(self):
         print("*** Recording stopped")

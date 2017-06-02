@@ -13,3 +13,5 @@ def initialize(project):
 
 def init_dependencies(project):
     project.build_depends_on('unicornhat')
+    project.build_depends_on('sounddevice')
+    project.build_depends_on('soundfile')

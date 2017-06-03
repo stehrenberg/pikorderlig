@@ -9,7 +9,7 @@ A simple application for recording audio via linein, some fancy visualization wi
 * install packages: ```apt-get install python3-pip libsndfile1 libffi-dev```
 * if pip is already installed, you might need to upgrade it with ```pip install -U pip```
 * install Pybuilder: ```python3.6 -m pip install pybuilder```
-* run the project's build script with ```./pikorderlig/src/build.py``` (that installs additional dependencies)
+* run the project's build script with ```cd ./pikorderlig/src; pyb``` (this installs additional dependencies)
 * now you can run the software with ```./pikorderlig/src/pikorderlig.py```
 
 ## PIP

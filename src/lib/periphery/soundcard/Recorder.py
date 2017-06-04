@@ -15,11 +15,13 @@ class Recorder:
         self._queue = queue.Queue()
 
     def start(self):
+        watcher_thread = Thread()
+        self._is_recording = True
+
         print("*** Recording started!")
         print(sd.query_devices())
-        self._is_recording = True
-        watcher_thread = Thread()
         self.record()
+        watcher_thread.run()
 
     def record(self):
         with sf.SoundFile(self._filepath,

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import time
 from lib.periphery.soundcard.Recorder import Recorder
 
@@ -16,5 +16,5 @@ print("time.strftime() is: " + date_as_string)
 print("file name is: " + record_file)
 
 recorder.start()
-time.sleep(5)
+time.sleep(10)
 recorder.stop()

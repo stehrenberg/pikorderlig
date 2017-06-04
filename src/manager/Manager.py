@@ -2,9 +2,9 @@ from multiprocessing import Process
 
 class Manager(Process):
 
-    def __init__(self):
+    def __init__(self, recorder_queue):
         Process.__init__(self)
-        self.queue          # wird von anderen Prozessen (LEDs, Webserver, Sound) befuellt
+        self.recorder_queue = recorder_queue
 
     def run(self):
         print("*** Manager started up")

@@ -3,6 +3,7 @@ import soundfile as sf
 import sounddevice as sd
 from threading import Thread
 from multiprocessing import Process
+import getpass
 
 from lib.periphery.soundcard.RecordWatcher import RecordWatcher
 
@@ -13,22 +14,21 @@ class Recorder(Process):
     """
 
     def __init__(self, filepath_as_string):
+        Process.__init__(self)
         self._filepath = filepath_as_string
         self._is_recording = False
         self._samplerate = 44100
         self._channels = 2
         self._subtype = "PCM_16"
         self._queue = queue.Queue()
-        self.watcher_thread = RecordWatcher(self)
-        self.watcher_thread.daemon = True
-        self.recording_thread = Thread(target=self.record)
 
-    def start(self):
+
+    def run(self):
         self._is_recording = True
+        self.recording_thread = Thread(target=self.record)
 
         print("*** Recording started!")
         self.recording_thread.start()
-        self.watcher_thread.start()
 
     def record(self):
         with sf.SoundFile(self._filepath,
@@ -36,12 +36,14 @@ class Recorder(Process):
                 samplerate=self._samplerate,
                 channels=self._channels,
                 subtype=self._subtype) as file:
+            print("is_recording is ", self._is_recording)
             with sd.InputStream(samplerate=self._samplerate,
                                 device=0,
                                 channels=self._channels,
                                 callback=self._callback):
                 while self._is_recording:
                     file.write(self._queue.get())
+                    print("Recording!")
 
     def stop(self):
         print("*** Recording stopped")

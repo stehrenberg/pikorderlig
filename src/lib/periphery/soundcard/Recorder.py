@@ -1,6 +1,8 @@
+import queue
+
 import soundfile as sf
 import sounddevice as sd
-import queue
+from threading import Thread
 
 class Recorder:
 
@@ -16,7 +18,10 @@ class Recorder:
         print("*** Recording started!")
         print(sd.query_devices())
         self._is_recording = True
+        watcher_thread = Thread()
+        self.record()
 
+    def record(self):
         with sf.SoundFile(self._filepath,
                 mode='x',
                 samplerate=self._samplerate,
@@ -29,6 +34,8 @@ class Recorder:
                 while self._is_recording:
                     file.write(self._queue.get())
 
+    def getStatus(self):
+        return self._is_recording
 
     def stop(self):
         print("*** Recording stopped")

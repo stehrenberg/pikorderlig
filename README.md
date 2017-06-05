@@ -3,10 +3,12 @@ A simple application for recording audio via linein, some fancy visualization wi
 
 ## Prerequisites
 * Python 3.6.1 (see https://gist.github.com/dschep/24aa61672a2092246eaca2824400d37f)
+** `sudo rm /usr/bin/python3`
+** `sudo ln -s /usr/local/bin/python3.6 /usr/bin/python3`
 
 ## Setting up the project on the Pi
 * clone the repo and copy it to your Pi
-* install packages: ```apt-get install python3-pip libsndfile1 libffi-dev python3-tornado```
+* install packages: ```apt-get install python3-pip libsndfile1 libffi-dev```
 * if pip is already installed, you might need to upgrade it with ```pip install -U pip```
 * install Pybuilder: ```python3.6 -m pip install pybuilder```
 * run the project's build script with ```cd ./pikorderlig/src; pyb``` (this installs additional dependencies)

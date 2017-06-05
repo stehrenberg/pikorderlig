@@ -33,22 +33,12 @@ def main():
     # print(current_time())
 
 def set_up_recorder():
-    recorder = Recorder(filepath_as_string=build_file_path())
-
+    recorder = Recorder()
     return recorder
 
 def current_time():
     date_format = '%Y-%m-%d %H:%M:%S'
     return time.strftime(date_format)
-
-def build_file_path():
-    date_format = '%Y-%m-%d_%H-%M-%S'
-    date_as_string = time.strftime(date_format)
-    base_path = '/home/pi/recordings/'
-    file_ending = '.wav'
-    record_file = base_path + 'recording_' + date_as_string + file_ending
-
-    return record_file
 
 def setup_webserver(webserver_queue):
     return Rest(webserver_queue)

@@ -23,6 +23,9 @@ class LineInGrabber(Thread):
         self._is_recording = True
         self.record()
 
+    def is_recording(self):
+        return self._is_recording
+
     def record(self):
         print('Recording ', self._filepath)
 
@@ -45,7 +48,7 @@ class LineInGrabber(Thread):
         self._is_recording = False
         time.sleep(1)
         self._soundfile.close()
-        print("*** Recording stopped")
+        print("*** Stopped recording ", self._filepath)
 
     def getStatus(self):
         return self._is_recording

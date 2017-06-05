@@ -18,6 +18,7 @@ class LineInGrabber(Thread):
         self._channels = 2
         self._subtype = "PCM_16"
         self._queue = queue.Queue()
+        self._started_recording = 0
 
     def run(self):
         self._is_recording = True
@@ -26,9 +27,17 @@ class LineInGrabber(Thread):
     def is_recording(self):
         return self._is_recording
 
+    def status(self):
+        return {
+            "recording": self._is_recording,
+            "file": self._filepath,
+            "started_recording": self._started_recording
+        }
+
     def record(self):
         print('Recording ', self._filepath)
 
+        self._started_recording = time.time()
         self._soundfile = sf.SoundFile(self._filepath,
                                        mode='x',
                                        samplerate=self._samplerate,

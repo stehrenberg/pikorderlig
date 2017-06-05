@@ -8,7 +8,7 @@ class Rest(Process):
         self._queue = queue
 
         application = tornado.web.Application([
-            (r'/recording/(.*)', RecordingHandler)
+            (r'/recording/(.*)', RecordingHandler, dict(webserver_queue=self._queue))
         ])
 
         application.listen(8080)

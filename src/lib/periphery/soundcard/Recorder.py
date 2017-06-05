@@ -10,14 +10,10 @@ class Recorder(Process):
     def __init__(self, filepath_as_string):
         Process.__init__(self)
         self._filepath = filepath_as_string
-        self._line_in_grabber = LineInGrabber(filepath_as_string)
-
-
-    def run(self):
-        self._line_in_grabber.start()
 
     def startRecording(self):
-        self._line_in_grabber.startRecording()
+        self._line_in_grabber = LineInGrabber(self._filepath)
+        self._line_in_grabber.start()
 
     def stopRecording(self):
         self._line_in_grabber.stop()

@@ -5,7 +5,6 @@ class RecordingHandler(tornado.web.RequestHandler):
         self._queue = webserver_queue
 
     def get(self, action):
-        print('Webserver action is ', action)
         if not action in dir(self):
             self.set_status(404)
         else:

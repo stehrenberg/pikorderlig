@@ -8,6 +8,7 @@ from manager.Manager import Manager
 def main():
     print("*** Hi there! Starting up...")
     webserver_queue = Queue()
+    recorder_queue = Queue()
 
     print("*** Starting Webserver")
     webserver = setup_webserver(webserver_queue)
@@ -19,6 +20,9 @@ def main():
 
     print("*** Starting Manager")
     manager = setup_manager()
+    manager.setWebserver(webserver, webserver_queue)
+    manager.setRecorder(recorder, recorder_queue)
+    manager.start()
 
     # print(current_time())
     # time.sleep(5)

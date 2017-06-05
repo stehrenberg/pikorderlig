@@ -1,6 +1,7 @@
 import queue
 import soundfile as sf
 import sounddevice as sd
+import time
 from threading import Thread
 
 
@@ -17,10 +18,8 @@ class LineInGrabber(Thread):
         self._channels = 2
         self._subtype = "PCM_16"
         self._queue = queue.Queue()
-        self._soundfile = False
 
-
-    def startRecording(self):
+    def run(self):
         self._is_recording = True
         self.record()
 
@@ -42,10 +41,11 @@ class LineInGrabber(Thread):
                     file.write(self._queue.get())
         return
 
-    def stopRecording(self):
-        print("*** Recording stopped")
+    def stop(self):
         self._is_recording = False
+        time.sleep(1)
         self._soundfile.close()
+        print("*** Recording stopped")
 
     def getStatus(self):
         return self._is_recording

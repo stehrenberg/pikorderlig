@@ -17,6 +17,7 @@ class LineInGrabber(Thread):
         self._channels = 2
         self._subtype = "PCM_16"
         self._queue = queue.Queue()
+        self._soundfile = False
 
 
     def run(self):
@@ -26,11 +27,13 @@ class LineInGrabber(Thread):
     def record(self):
         print('Recording ', self._filepath)
 
-        with sf.SoundFile(self._filepath,
-                          mode='x',
-                          samplerate=self._samplerate,
-                          channels=self._channels,
-                          subtype=self._subtype) as file:
+        self._soundfile = sf.SoundFile(self._filepath,
+                                       mode='x',
+                                       samplerate=self._samplerate,
+                                       channels=self._channels,
+                                       subtype=self._subtype)
+
+        with self._soundfile as file:
             with sd.InputStream(samplerate=self._samplerate,
                                 device=0,
                                 channels=self._channels,
@@ -42,6 +45,7 @@ class LineInGrabber(Thread):
     def stop(self):
         print("*** Recording stopped")
         self._is_recording = False
+        self._soundfile.close()
 
     def getStatus(self):
         return self._is_recording

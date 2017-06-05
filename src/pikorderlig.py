@@ -6,14 +6,23 @@ from lib.periphery.soundcard.Recorder import Recorder
 def main():
     print("*** Hi there! Starting up...")
     recorder = set_up_recorder()
+    print(current_time())
     recorder.start()
-    time.sleep(5)
+    # time.sleep(5)
+    recording_time = 6 * 3600
+    print("*** Recording for seconds: ", recording_time)
+    time.sleep(recording_time)
     recorder.stop()
+    print(current_time())
 
 def set_up_recorder():
     recorder = Recorder(filepath_as_string=build_file_path())
 
     return recorder
+
+def current_time():
+    date_format = '%Y-%m-%d %H:%M:%S'
+    return time.strftime(date_format)
 
 def build_file_path():
     date_format = '%Y-%m-%d_%H-%M-%S'

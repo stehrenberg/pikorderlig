@@ -25,9 +25,16 @@ class Manager(Process):
         self._recorder_queue = recorder_queue
 
     def _handle_action(self, action):
-        print("*** Handling webserver queue action ", action)
-        if action == 'recording:start':
-            self._recorder.start_recording()
+        print("*** Handling queue action: ", action)
 
-        elif action == 'recording:stop':
-            self._recorder.stop_recording()
+        action_mapper = {
+            'recording:start' : self._recorder.start_recording,
+            'recording:stop' : self._recorder.stop_recording
+        }
+
+        method_to_call = action_mapper.get(action, self._action_not_found)
+        method_to_call()
+
+    def _action_not_found(self):
+        raise LookupError
+

@@ -8,6 +8,7 @@ class RecordingHandler(tornado.web.RequestHandler):
     def get(self, action):
         if not action in dir(self):
             self.set_status(404)
+            self.write('404: Not Found')
         else:
             self.set_status(200)
             self.set_header('Content-Type', 'Application/json')

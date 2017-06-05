@@ -28,7 +28,7 @@ class Manager(Process):
     def _handle_webserver_action(self, action):
         print("*** Handling webserver queue action ", action)
         if action == 'recording:start':
-            self._recorder.startRecording()
+            self._recorder.start_recording()
 
         elif action == 'recording:stop':
-            self._recorder.stopRecording()
+            self._recorder.stop_recording()

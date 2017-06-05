@@ -23,13 +23,13 @@ class Recorder(Process):
         else:
             return {"recording": False}
 
-    def startRecording(self):
+    def start_recording(self):
         if not self._is_recording():
             filepath = self._get_new_file_name()
             self._line_in_grabber = LineInGrabber(filepath)
             self._line_in_grabber.start()
 
-    def stopRecording(self):
+    def stop_recording(self):
         if self._is_recording():
             self._line_in_grabber.stop()
             self._line_in_grabber.join()

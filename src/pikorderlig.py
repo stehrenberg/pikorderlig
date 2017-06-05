@@ -12,7 +12,7 @@ def main():
     recorder_queue = Queue()
     manager_queue = Queue()
 
-    webserver = set_up_webserver(webserver_queue)
+    webserver = set_up_webserver(webserver_queue, manager_queue)
     recorder = set_up_recorder(recorder_queue, manager_queue)
     manager = set_up_manager(manager_queue)
     manager.set_webserver(webserver, webserver_queue)

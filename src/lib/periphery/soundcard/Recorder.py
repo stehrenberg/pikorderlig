@@ -16,5 +16,6 @@ class Recorder(Process):
         self._line_in_grabber.start()
 
     def stopRecording(self):
-        self._line_in_grabber.stop()
-
+        if "_line_in_grabber" in dir(self):
+            self._line_in_grabber.stop()
+            del self._line_in_grabber

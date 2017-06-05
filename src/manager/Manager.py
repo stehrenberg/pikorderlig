@@ -9,14 +9,12 @@ class Manager(Process):
 
     def run(self):
         print("*** Manager starting up")
-        # spawned Prozesse für Webserver, Recorder, LEDs
-        # spawned queues für einzelne prozesse
         # iteriert durch msg queue und arbeitet Auftraege ab
 
         while True:
-            webserver_action = self._webserver_queue.get()
-            self._handle_webserver_action(webserver_action)
-            time.sleep(0.5)
+            action = self._manager_queue.get()
+            self._handle_action(action)
+            time.sleep(0.2)
 
     def set_webserver(self, webserver, webserver_queue):
         self._webserver = webserver
@@ -26,7 +24,7 @@ class Manager(Process):
         self._recorder = recorder
         self._recorder_queue = recorder_queue
 
-    def _handle_webserver_action(self, action):
+    def _handle_action(self, action):
         print("*** Handling webserver queue action ", action)
         if action == 'recording:start':
             self._recorder.start_recording()

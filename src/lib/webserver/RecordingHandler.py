@@ -2,8 +2,9 @@ import tornado.web
 import json
 
 class RecordingHandler(tornado.web.RequestHandler):
-    def initialize(self, webserver_queue):
-        self._queue = webserver_queue
+    def initialize(self, webserver_queue, manager_queue):
+        self._webserver_queue = webserver_queue
+        self._manager_queue = manager_queue
 
     def get(self, action):
         if not action in dir(self):
@@ -17,9 +18,9 @@ class RecordingHandler(tornado.web.RequestHandler):
             self.write(json.dumps(content))
 
     def start(self):
-        self._queue.put('recording:start')
+        self._manager_queue.put('recording:start')
         return {"status": "OK"}
 
     def stop(self):
-        self._queue.put('recording:stop')
+        self._manager_queue.put('recording:stop')
         return {"status": "OK"}

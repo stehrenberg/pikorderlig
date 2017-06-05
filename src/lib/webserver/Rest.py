@@ -12,7 +12,12 @@ class Rest(Process):
     def run(self):
         print("*** Starting Webserver")
         application = tornado.web.Application([
-            (r'/recording/(.*)', RecordingHandler, dict(webserver_queue=self._webserver_queue))
+            (r'/recording/(.*)',
+             RecordingHandler,
+             dict(
+                 webserver_queue=self._webserver_queue,
+                 manager_queue=self._manager_queue
+             ))
         ])
 
         application.listen(8080)

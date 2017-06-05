@@ -14,18 +14,18 @@ class Manager(Process):
 
         while True:
             webserver_action = self._webserver_queue.get()
-            self._handleWebserverAction(webserver_action)
+            self._handle_webserver_action(webserver_action)
             time.sleep(0.5)
 
-    def setWebserver(self, webserver, webserver_queue):
+    def set_webserver(self, webserver, webserver_queue):
         self._webserver = webserver
         self._webserver_queue = webserver_queue
 
-    def setRecorder(self, recorder, recorder_queue):
+    def set_recorder(self, recorder, recorder_queue):
         self._recorder = recorder
         self._recorder_queue = recorder_queue
 
-    def _handleWebserverAction(self, action):
+    def _handle_webserver_action(self, action):
         print("*** Handling webserver queue action ", action)
         if action == 'recording:start':
             self._recorder.startRecording()

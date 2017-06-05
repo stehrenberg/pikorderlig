@@ -20,8 +20,8 @@ def main():
 
     print("*** Starting Manager")
     manager = setup_manager()
-    manager.setWebserver(webserver, webserver_queue)
-    manager.setRecorder(recorder, recorder_queue)
+    manager.set_webserver(webserver, webserver_queue)
+    manager.set_recorder(recorder, recorder_queue)
     manager.start()
 
     # print(current_time())

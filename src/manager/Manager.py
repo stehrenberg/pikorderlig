@@ -3,9 +3,15 @@ import time
 
 class Manager(Process):
 
+    _recorder = None
+    _recorder_queue = None
+    _webserver = None
+    _webserver_queue = None
+
     def __init__(self, manager_queue):
         Process.__init__(self)
         self._manager_queue = manager_queue
+        self._action_mappings = {}
 
     def run(self):
         print("*** Manager starting up")
@@ -24,16 +30,17 @@ class Manager(Process):
         self._recorder = recorder
         self._recorder_queue = recorder_queue
 
+    def add_action_mappings(self, action_handler):
+        action_mappings = action_handler.get_action_mappings()
+        for action, method in action_mappings.items():
+            self._action_mappings[action] = method
+
     def _handle_action(self, action):
         print("*** Handling queue action: ", action)
+        method_to_call = self._action_mappings.get(action, self._action_not_found)
 
-        action_mapper = {
-            'recording:start' : self._recorder.start_recording,
-            'recording:stop' : self._recorder.stop_recording
-        }
-
-        method_to_call = action_mapper.get(action, self._action_not_found)
         method_to_call()
+
 
     def _action_not_found(self):
         raise LookupError

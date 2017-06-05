@@ -4,6 +4,8 @@ from lib.periphery.soundcard.Recorder import Recorder
 from lib.webserver.Rest import Rest
 from multiprocessing import Queue
 from manager.Manager import Manager
+from manager.RecordingActionHandler import RecordingActionHandler
+
 
 def main():
     print("*** Hi there! Starting up...")
@@ -15,8 +17,11 @@ def main():
     webserver = set_up_webserver(webserver_queue, manager_queue)
     recorder = set_up_recorder(recorder_queue, manager_queue)
     manager = set_up_manager(manager_queue)
+    action_handler = RecordingActionHandler(recorder)
+
     manager.set_webserver(webserver, webserver_queue)
     manager.set_recorder(recorder, recorder_queue)
+    manager.add_action_mappings(action_handler)
 
     webserver.start()
     recorder.start()

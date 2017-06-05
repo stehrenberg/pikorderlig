@@ -24,13 +24,6 @@ class LineInGrabber(Thread):
         self._is_recording = True
         self.record()
 
-    def get_status(self):
-        return {
-            "recording": self._is_recording,
-            "file": self._filepath,
-            "recording_start": self._recording_start
-        }
-
     def record(self):
         print('Recording ', self._filepath)
 
@@ -62,6 +55,12 @@ class LineInGrabber(Thread):
     def _callback(self, indata, frames, time, status):
         self._queue.put(indata.copy())
 
+    def get_status(self):
+        return {
+            "recording": self._is_recording,
+            "file": self._filepath,
+            "recording_start": self._recording_start
+        }
 
     def sigIntHandler(self, signum, stack):
         print("*** Keyboard interrupt, stopping recording")

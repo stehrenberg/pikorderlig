@@ -7,36 +7,30 @@ from manager.Manager import Manager
 
 def main():
     print("*** Hi there! Starting up...")
+
     webserver_queue = Queue()
     recorder_queue = Queue()
+    manager_queue = Queue()
 
-    print("*** Starting Webserver")
-    webserver = setup_webserver(webserver_queue)
-    webserver.start()
-
-    print("*** Starting Recorder")
-    recorder = set_up_recorder()
-    recorder.start()
-
-    print("*** Starting Manager")
-    manager = setup_manager()
+    webserver = set_up_webserver(webserver_queue)
+    recorder = set_up_recorder(recorder_queue, manager_queue)
+    manager = set_up_manager(manager_queue)
     manager.set_webserver(webserver, webserver_queue)
     manager.set_recorder(recorder, recorder_queue)
+
+    webserver.start()
+    recorder.start()
     manager.start()
 
-def set_up_recorder():
-    recorder = Recorder()
+def set_up_webserver(webserver_queue, manager_queue):
+    return Rest(webserver_queue, manager_queue)
+
+def set_up_recorder(recorder_queue, manager_queue):
+    recorder = Recorder(recorder_queue, manager_queue)
     return recorder
 
-def current_time():
-    date_format = '%Y-%m-%d %H:%M:%S'
-    return time.strftime(date_format)
-
-def setup_webserver(webserver_queue):
-    return Rest(webserver_queue)
-
-def setup_manager():
-    return Manager()
+def set_up_manager(manager_queue):
+    return Manager(manager_queue)
 
 #######################
 

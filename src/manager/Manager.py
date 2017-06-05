@@ -3,11 +3,12 @@ import time
 
 class Manager(Process):
 
-    def __init__(self):
+    def __init__(self, manager_queue):
         Process.__init__(self)
+        self._manager_queue = manager_queue
 
     def run(self):
-        print("*** Manager started up")
+        print("*** Manager starting up")
         # spawned Prozesse für Webserver, Recorder, LEDs
         # spawned queues für einzelne prozesse
         # iteriert durch msg queue und arbeitet Auftraege ab

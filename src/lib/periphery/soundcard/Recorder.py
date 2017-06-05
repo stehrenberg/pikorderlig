@@ -8,14 +8,13 @@ class Recorder(Process):
     Represents a recording instance that records the current line-in signal as .WAV file.
     """
 
-    def __init__(self):
+    def __init__(self, recorder_queue, manager_queue):
         Process.__init__(self)
+        self._recorder_queue = recorder_queue
+        self._manager_queue = manager_queue
 
-    def _is_recording(self):
-        if "_line_in_grabber" not in dir(self):
-            return False
-
-        return self._line_in_grabber.is_recording()
+    def run(self):
+        print("*** Starting Recorder")
 
     def get_status(self):
         if self._is_recording():
@@ -26,7 +25,6 @@ class Recorder(Process):
                 "file": None,
                 "recording_start": None
             }
-
         return status
 
     def start_recording(self):
@@ -40,6 +38,16 @@ class Recorder(Process):
             self._line_in_grabber.stop()
             self._line_in_grabber.join()
             del self._line_in_grabber
+
+############## Helpers ##############
+
+    def _is_recording(self):
+        status = False
+
+        if "_line_in_grabber" in dir(self):
+            status = self._line_in_grabber.is_recording()
+
+        return status
 
     def _get_new_file_name(self):
         date_format = '%Y-%m-%d_%H-%M-%S'

@@ -4,13 +4,15 @@ from multiprocessing import Process
 from lib.webserver.RecordingHandler import RecordingHandler
 
 class Rest(Process):
-    def __init__(self, queue):
+    def __init__(self, webserver_queue, manager_queue):
         Process.__init__(self)
-        self._queue = queue
+        self._webserver_queue = webserver_queue
+        self._manager_queue = manager_queue
 
     def run(self):
+        print("*** Starting Webserver")
         application = tornado.web.Application([
-            (r'/recording/(.*)', RecordingHandler, dict(webserver_queue=self._queue))
+            (r'/recording/(.*)', RecordingHandler, dict(webserver_queue=self._webserver_queue))
         ])
 
         application.listen(8080)

@@ -19,7 +19,7 @@ class Recorder(Process):
 
     def get_status(self):
         if self._is_recording():
-            status = self._line_in_grabber.status()
+            status = self._line_in_grabber.get_status()
         else:
             status = {
                 "recording": False,

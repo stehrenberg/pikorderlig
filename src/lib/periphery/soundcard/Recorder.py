@@ -17,11 +17,17 @@ class Recorder(Process):
 
         return self._line_in_grabber.is_recording()
 
-    def status(self):
+    def get_status(self):
         if self._is_recording():
-            return self._line_in_grabber.status()
+            status = self._line_in_grabber.status()
         else:
-            return {"recording": False}
+            status = {
+                "recording": False,
+                "file": None,
+                "recording_start": None
+            }
+
+        return status
 
     def start_recording(self):
         if not self._is_recording():

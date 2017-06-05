@@ -24,14 +24,6 @@ def main():
     manager.set_recorder(recorder, recorder_queue)
     manager.start()
 
-    # print(current_time())
-    # time.sleep(5)
-    # recording_time = 6 * 3600
-    # print("*** Recording for seconds: ", recording_time)
-    # time.sleep(recording_time)
-    # recorder.stop()
-    # print(current_time())
-
 def set_up_recorder():
     recorder = Recorder()
     return recorder

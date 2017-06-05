@@ -1,18 +1,26 @@
 #!/usr/bin/env python3
 import time
 from lib.periphery.soundcard.Recorder import Recorder
+from lib.webserver.Rest import Rest
+from multiprocessing import Queue
 
 
 def main():
     print("*** Hi there! Starting up...")
-    recorder = set_up_recorder()
-    print(current_time())
-    recorder.start()
+
+    print("*** Starting Webserver")
+    webserver = setup_webserver()
+    webserver.start()
+
+    # recorder = set_up_recorder()
+    # print(current_time())
+    # recorder.start()
+
     # time.sleep(5)
-    recording_time = 6 * 3600
-    print("*** Recording for seconds: ", recording_time)
-    time.sleep(recording_time)
-    recorder.stop()
+    # recording_time = 6 * 3600
+    # print("*** Recording for seconds: ", recording_time)
+    # time.sleep(recording_time)
+    # recorder.stop()
     print(current_time())
 
 def set_up_recorder():
@@ -32,6 +40,10 @@ def build_file_path():
     record_file = base_path + 'recording_' + date_as_string + file_ending
 
     return record_file
+
+def setup_webserver():
+    webserver_queue = Queue()
+    return Rest(webserver_queue)
 
 #######################
 

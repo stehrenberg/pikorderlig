@@ -20,7 +20,7 @@ class LineInGrabber(Thread):
         self._soundfile = False
 
 
-    def run(self):
+    def startRecording(self):
         self._is_recording = True
         self.record()
 
@@ -42,7 +42,7 @@ class LineInGrabber(Thread):
                     file.write(self._queue.get())
         return
 
-    def stop(self):
+    def stopRecording(self):
         print("*** Recording stopped")
         self._is_recording = False
         self._soundfile.close()

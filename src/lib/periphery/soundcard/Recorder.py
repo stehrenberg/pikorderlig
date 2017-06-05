@@ -14,8 +14,11 @@ class Recorder(Process):
 
 
     def run(self):
-        self._line_in_grabber.run()
+        self._line_in_grabber.start()
 
-    def stop(self):
+    def startRecording(self):
+        self._line_in_grabber.startRecording()
+
+    def stopRecording(self):
         self._line_in_grabber.stop()
 

@@ -53,6 +53,8 @@ class LineInGrabber(Thread):
         return self._is_recording
 
     def _callback(self, indata, frames, time, status):
+        if status:
+            print("Error while recording: ", status)
         self._queue.put(indata.copy())
 
     def get_status(self):

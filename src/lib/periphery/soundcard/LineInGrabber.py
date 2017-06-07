@@ -24,23 +24,26 @@ class LineInGrabber(Thread):
         self._is_recording = True
         self.record()
 
-    def record(self):
-        print('Recording ', self._filepath)
-
-        self._recording_start = time.time()
+    def _create_sound_file(self):
         self._soundfile = sf.SoundFile(self._filepath,
                                        mode='x',
                                        samplerate=self._samplerate,
                                        channels=self._channels,
                                        subtype=self._subtype)
 
-        with self._soundfile as file:
-            with sd.InputStream(samplerate=self._samplerate,
-                                device=0,
-                                channels=self._channels,
-                                callback=self._callback):
-                while self._is_recording:
-                    file.write(self._queue.get())
+    def record(self):
+        print('Recording ', self._filepath)
+
+        self._recording_start = time.time()
+        self._create_sound_file()
+
+        # with self._soundfile as file:
+        with sd.InputStream(samplerate=self._samplerate,
+                            device=0,
+                            channels=self._channels,
+                            callback=self._callback):
+            while self._is_recording:
+                self._soundfile.write(self._queue.get())
         return
 
     def stop(self):

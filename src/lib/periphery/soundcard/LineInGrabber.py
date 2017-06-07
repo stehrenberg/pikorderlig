@@ -10,21 +10,32 @@ class LineInGrabber(Thread):
     Represents a recording instance that records the current line-in signal as .WAV file.
     """
 
-    def __init__(self, filepath_as_string):
+    def __init__(self, file_information):
         Thread.__init__(self)
-        self._filepath = filepath_as_string
+        self._file_information = file_information
+        self._filepath = ''
         self._is_recording = False
         self._samplerate = 44100
         self._channels = 2
         self._subtype = "PCM_16"
         self._queue = queue.Queue()
         self._recording_start = 0
+        self._current_slice = 0
 
     def run(self):
         self._is_recording = True
         self.record()
 
+    def _get_current_slice(self):
+        return str(self._current_slice)
+
+    def _get_current_file_name(self):
+        return self._file_information['file_path'] +\
+               '-part-' + self._get_current_slice() +\
+               self._file_information['file_ending']
+
     def _create_sound_file(self):
+        self._filepath = self._get_current_file_name()
         self._soundfile = sf.SoundFile(self._filepath,
                                        mode='x',
                                        samplerate=self._samplerate,
@@ -32,10 +43,9 @@ class LineInGrabber(Thread):
                                        subtype=self._subtype)
 
     def record(self):
-        print('Recording ', self._filepath)
-
         self._recording_start = time.time()
         self._create_sound_file()
+        print('Recording ', self._filepath)
 
         # with self._soundfile as file:
         with sd.InputStream(samplerate=self._samplerate,

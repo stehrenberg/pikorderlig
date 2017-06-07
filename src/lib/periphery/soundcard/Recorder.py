@@ -54,6 +54,9 @@ class Recorder(Process):
         date_as_string = time.strftime(date_format)
         base_path = '/home/pi/recordings/'
         file_ending = '.wav'
-        record_file = base_path + 'recording_' + date_as_string + file_ending
+        record_file = base_path + 'recording_' + date_as_string
 
-        return record_file
+        return {
+            "file_path": record_file,
+            "file_ending": file_ending
+        }

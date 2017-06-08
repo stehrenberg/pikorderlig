@@ -7,6 +7,7 @@ from threading import Thread
 
 class LineInGrabber(Thread):
     _is_recording = False
+    _is_soundfile_writable = False
     _filepath = ''
     _current_slice = 0
     _current_slice_start = 0.0
@@ -46,6 +47,7 @@ class LineInGrabber(Thread):
                                        subtype=self._subtype)
 
         self._reset_slice_length()
+        self._is_soundfile_writable = True
 
     def record(self):
         self._recording_start = time.time()
@@ -58,10 +60,15 @@ class LineInGrabber(Thread):
                             channels=self._channels,
                             callback=self._input_stream_callback):
             while self._is_recording:
-                self._soundfile.write(self._recording_queue.get())
+                self._store_to_soundfile()
         return
 
+    def _store_to_soundfile(self):
+        if self._is_soundfile_writable:
+            self._soundfile.write(self._recording_queue.get())
+
     def _rotate_slice(self):
+        self._is_soundfile_writable = False
         self._current_slice += 1
         self._create_next_sound_file()
         print('*** Recording new slice ', self._filepath)

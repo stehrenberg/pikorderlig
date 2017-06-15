@@ -25,3 +25,8 @@ class RecordingHandler(tornado.web.RequestHandler):
     def stop(self):
         self._manager_queue.put('recording:stop')
         return {"status": "OK"}
+
+    def status(self):
+        self._manager_queue.put('web:recording:status')
+        status = self._webserver_queue.get();
+        return status

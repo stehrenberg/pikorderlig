@@ -22,7 +22,6 @@ def main():
     manager.set_webserver(webserver, webserver_queue)
     manager.set_recorder(recorder, recorder_queue)
 
-
     recording_action_handler = RecordingActionHandler(recorder)
     web_action_handler = WebActionHandler(recorder, webserver_queue)
     manager.add_action_mappings(recording_action_handler)

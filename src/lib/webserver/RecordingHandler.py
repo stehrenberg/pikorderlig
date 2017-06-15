@@ -20,7 +20,10 @@ class RecordingHandler(tornado.web.RequestHandler):
 
     def start(self):
         self._manager_queue.put('recording:start')
-        return {"status": "OK"}
+        self._manager_queue.put('web:recording:status')
+        status = self._webserver_queue.get()
+        return status
+        # return {"status": "OK"}
 
     def stop(self):
         self._manager_queue.put('recording:stop')
@@ -28,5 +31,5 @@ class RecordingHandler(tornado.web.RequestHandler):
 
     def status(self):
         self._manager_queue.put('web:recording:status')
-        status = self._webserver_queue.get();
+        status = self._webserver_queue.get()
         return status

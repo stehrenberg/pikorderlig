@@ -13,6 +13,7 @@ class RecordingHandler(tornado.web.RequestHandler):
         else:
             self.set_status(200)
             self.set_header('Content-Type', 'Application/json')
+            self.set_header('Access-Control-Allow-Origin', '*')
             method_to_call = getattr(self, action)
             content = method_to_call()
             self.write(json.dumps(content))

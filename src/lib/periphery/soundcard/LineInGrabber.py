@@ -11,7 +11,7 @@ class LineInGrabber(Thread):
     _filepath = ''
     _current_slice = 0
     _current_slice_start = 0.0
-    _slice_length = 7200.0  # seconds
+    _slice_length = 14400.0  # seconds
     _samplerate = 44100
     _channels = 2
     _subtype = "PCM_16"

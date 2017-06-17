@@ -22,10 +22,10 @@ class Visualizer(Process):
             info = self._visualizer_queue.get()
             print(info)
             if info == 'recording:heartbeat':
-                unicorn.set_pixel(0, 0, 0, 0, 0)
+                unicorn.set_pixel(7, 3, 0, 0, 0)
                 unicorn.show()
                 time.sleep(2)
-                unicorn.set_pixel(0, 0, 255, 0, 0)
+                unicorn.set_pixel(7, 3, 255, 0, 0)
                 unicorn.show()
             elif info == 'recording:stopped':
                 unicorn.set_pixel(0, 0, 0, 0, 0)
@@ -38,6 +38,7 @@ class Visualizer(Process):
         unicorn.rotation(0)
         unicorn.brightness(0.2)
         self.width, self.height = unicorn.get_shape()
+        print('Unicorn has width: ', self.width, ' and height: ', self.height)
 
     def _startup(self, unicorn):
         for y in range(self.width):

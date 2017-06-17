@@ -3,7 +3,7 @@ import soundfile as sf
 import sounddevice as sd
 import time
 from threading import Thread
-
+import numpy as np
 
 class LineInGrabber(Thread):
     _is_recording = False
@@ -28,6 +28,8 @@ class LineInGrabber(Thread):
         self._recording_queue = queue.Queue()
         self._recording_start = 0
         self._manager_queue = manager_queue
+        delta_f = (2000 - 100) / (8 - 1) # /high - low / columns - 1
+        self._fftsize = np.ceil(self._samplerate / delta_f).astype(int)
 
     def run(self):
         self._is_recording = True
@@ -98,6 +100,13 @@ class LineInGrabber(Thread):
             self._store_last_heartbeat(recording_time)
 
         self._recording_queue.put(indata.copy())
+        #self._calculate_and_send_fft(indata)
+
+    def _calculate_and_send_fft(self, indata):
+        #magnitude = np.abs(np.fft.rfft(indata[:, 0], n=self._fftsize))
+        #magnitude *= 10 / self._fftsize # first parameter: gain
+        # Could not test with real data on first coding so just send a volume event
+        self._manager_queue.put('recording:volume')
 
     def _send_heartbeat(self):
         self._manager_queue.put('recording:heartbeat')

@@ -36,7 +36,7 @@ class Manager(Process):
             self._action_mappings[action] = method
 
     def _handle_action(self, action):
-        print("*** Handling queue action: ", action)
+        #print("*** Handling queue action: ", action)
         method_to_call = self._action_mappings.get(action, self._action_not_found)
 
         method_to_call()

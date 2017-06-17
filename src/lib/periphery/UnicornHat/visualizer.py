@@ -20,7 +20,6 @@ class Visualizer(Process):
 
         while True:
             info = self._visualizer_queue.get()
-            print(info)
             if info == 'recording:heartbeat':
                 unicorn.set_pixel(7, 3, 0, 0, 0)
                 unicorn.show()
@@ -30,7 +29,14 @@ class Visualizer(Process):
             elif info == 'recording:stopped':
                 unicorn.set_pixel(7, 3, 0, 0, 0)
                 unicorn.show()
-            time.sleep(0.01)
+            elif info == 'recording:volume':
+                x = randint(0, 6)
+                y = randint(0, 2)
+                red = randint(1, 255)
+                green = randint(1, 255)
+                blue = randint(1, 255)
+                unicorn.set_pixel(x, y, red, green, blue)
+                unicorn.show()
 
 
     def _bootstrap_unicorn(self, unicorn):

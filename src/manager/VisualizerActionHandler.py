@@ -4,7 +4,8 @@ class VisualizerActionHandler:
         self._action_mappings = {
             'recording:started': self._recording_started,
             'recording:heartbeat': self._recording_heartbeat,
-            'recording:stopped': self._recording_stopped
+            'recording:stopped': self._recording_stopped,
+            'recording:volume': self._recording_volume
         }
 
     def get_action_mappings(self):
@@ -18,3 +19,6 @@ class VisualizerActionHandler:
 
     def _recording_heartbeat(self):
         self._visualizer_queue.put('recording:heartbeat')
+
+    def _recording_volume(self):
+        self._visualizer_queue.put('recording:volume')

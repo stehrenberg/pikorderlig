@@ -28,7 +28,7 @@ class Visualizer(Process):
                 unicorn.set_pixel(7, 3, 255, 0, 0)
                 unicorn.show()
             elif info == 'recording:stopped':
-                unicorn.set_pixel(0, 0, 0, 0, 0)
+                unicorn.set_pixel(7, 3, 0, 0, 0)
                 unicorn.show()
             time.sleep(0.01)
 

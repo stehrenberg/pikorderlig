@@ -30,7 +30,7 @@ class Recorder(Process):
     def start_recording(self):
         if not self._is_recording():
             filepath = self._get_new_file_name()
-            self._line_in_grabber = LineInGrabber(filepath)
+            self._line_in_grabber = LineInGrabber(filepath, self._manager_queue)
             self._line_in_grabber.start()
 
     def stop_recording(self):

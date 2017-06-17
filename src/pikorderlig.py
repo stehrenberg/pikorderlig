@@ -7,6 +7,7 @@ from multiprocessing import Queue
 from manager.Manager import Manager
 from manager.RecordingActionHandler import RecordingActionHandler
 from manager.WebActionHandler import WebActionHandler
+from manager.VisualizerActionHandler import VisualizerActionHandler
 
 
 def main():
@@ -27,8 +28,10 @@ def main():
 
     recording_action_handler = RecordingActionHandler(recorder)
     web_action_handler = WebActionHandler(recorder, webserver_queue)
+    visualizer_action_handler = VisualizerActionHandler(visualizer_queue)
     manager.add_action_mappings(recording_action_handler)
     manager.add_action_mappings(web_action_handler)
+    manager.add_action_mappings(visualizer_action_handler)
 
     webserver.start()
     recorder.start()

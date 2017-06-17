@@ -12,6 +12,8 @@ class LineInGrabber(Thread):
     _current_slice = 0
     _current_slice_start = 0.0
     _slice_length = 14400.0  # seconds
+    _heartbeat_rate = 5.0 # seconds
+    _last_heartbeat = 0.0
     _samplerate = 44100
     _channels = 2
     _subtype = "PCM_16"
@@ -20,11 +22,12 @@ class LineInGrabber(Thread):
     Represents a recording instance that records the current line-in signal as .WAV file.
     """
 
-    def __init__(self, file_information):
+    def __init__(self, file_information, manager_queue):
         Thread.__init__(self)
         self._file_information = file_information
         self._recording_queue = queue.Queue()
         self._recording_start = 0
+        self._manager_queue = manager_queue
 
     def run(self):
         self._is_recording = True
@@ -59,6 +62,7 @@ class LineInGrabber(Thread):
                             device=0,
                             channels=self._channels,
                             callback=self._input_stream_callback):
+            self._send_heartbeat()
             while self._is_recording:
                 self._store_to_soundfile()
         return
@@ -77,6 +81,7 @@ class LineInGrabber(Thread):
         self._is_recording = False
         time.sleep(1)
         self._soundfile.close()
+        self._manager_queue.put('recording:stopped')
         print("*** Stopped recording ", self._filepath)
 
     def _input_stream_callback(self, indata, frames, recording_time, status):
@@ -88,7 +93,14 @@ class LineInGrabber(Thread):
         if self._is_slice_length_reached(recording_time):
             self._rotate_slice()
 
+        if self._is_heartbeat_due(recording_time):
+            self._send_heartbeat()
+            self._store_last_heartbeat(recording_time)
+
         self._recording_queue.put(indata.copy())
+
+    def _send_heartbeat(self):
+        self._manager_queue.put('recording:heartbeat')
 
     def get_status(self):
         return {
@@ -103,12 +115,18 @@ class LineInGrabber(Thread):
     def _is_slice_length_reached(self, recording_time):
         return recording_time.currentTime - self._current_slice_start >= self._slice_length
 
+    def _is_heartbeat_due(self, recording_time):
+        return recording_time.currentTime - self._last_heartbeat >= self._heartbeat_rate
+
     def _reset_slice_length(self):
         self._current_slice_start = 0.0  # will be set first time in the input callback
 
     def _store_slice_start(self, recording_time):
         if self._current_slice_start == 0.0:
             self._current_slice_start = recording_time.currentTime
+
+    def _store_last_heartbeat(self, recording_time):
+        self._last_heartbeat = recording_time.currentTime
 
     def sigIntHandler(self, signum, stack):
         print("*** Keyboard interrupt, stopping recording")

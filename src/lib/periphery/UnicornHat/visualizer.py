@@ -1,5 +1,5 @@
 from multiprocessing import Process
-import unicornhat as unicorn
+from random import randint
 import time
 
 class Visualizer(Process):
@@ -8,20 +8,46 @@ class Visualizer(Process):
         Process.__init__(self)
 
         self._visualizer_queue = visualizer_queue
-        self._bootstrap_unicorn()
-        self._startup()
+        #self._bootstrap_unicorn()
+        #self._startup()
 
-    def _bootstrap_unicorn(self):
-        unicorn.set_layout(unicorn.AUTO)
+    def run(self):
+        import unicornhat as unicorn
+
+        self._bootstrap_unicorn(unicorn)
+        self._startup(unicorn)
+        print('*** Unicorn started up')
+
+        while True:
+            info = self._visualizer_queue.get()
+            print(info)
+            if info == 'recording:heartbeat':
+                unicorn.set_pixel(0, 0, 0, 0, 0)
+                unicorn.show()
+                time.sleep(2)
+                unicorn.set_pixel(0, 0, 255, 0, 0)
+                unicorn.show()
+            elif info == 'recording:stopped':
+                unicorn.set_pixel(0, 0, 0, 0, 0)
+                unicorn.show()
+            time.sleep(0.01)
+
+
+    def _bootstrap_unicorn(self, unicorn):
+        unicorn.set_layout(unicorn.PHAT)
         unicorn.rotation(0)
         unicorn.brightness(0.2)
         self.width, self.height = unicorn.get_shape()
 
-    def _startup(self):
+    def _startup(self, unicorn):
         for y in range(self.width):
             for x in range(self.width):
-                unicorn.set_pixel(x, y, 255, 0, 0)
+                unicorn.set_pixel(x, y, 0, 0, 255)
                 unicorn.show()
                 time.sleep(0.01)
 
-        unicorn.off()
+        for y in range(self.width):
+            for x in range(self.width):
+                unicorn.set_pixel(x, y, 0, 0, 0)
+                unicorn.show()
+                time.sleep(0.01)
